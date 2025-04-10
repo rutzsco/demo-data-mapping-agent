@@ -7,6 +7,7 @@ using System.Text;
 
 using MinimalApi.Services.Search;
 using Azure;
+using Azure.Identity;
 
 
 namespace Assistants.API.Core
@@ -27,9 +28,10 @@ namespace Assistants.API.Core
                 var standardServiceEndpoint = config["AOAIStandardServiceEndpoint"];
                 var standardServiceKey = config["AOAIStandardServiceKey"];
 
+                if(string.IsNullOrEmpty(standardServiceKey))
+                  return new OpenAIClientFacade(configuration, null, new DefaultAzureCredential());
 
-                var facade =  new OpenAIClientFacade(configuration, new Azure.AzureKeyCredential(standardServiceKey), null);
-                return facade;
+                return new OpenAIClientFacade(configuration, new Azure.AzureKeyCredential(standardServiceKey), null);
             });
             services.AddSingleton<DataMapperChatService>();
             return services;
