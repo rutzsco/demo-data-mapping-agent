@@ -12,13 +12,9 @@ namespace Assistants.API.Core
         private readonly string _standardChatGptDeployment;
         private readonly string _standardServiceEndpoint;
         private readonly TokenCredential _tokenCredential;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly SearchClientFactory _searchClientFactory;
         private readonly AzureKeyCredential _azureKeyCredential;
 
-        private readonly AzureOpenAIClient _standardChatGptClient;
-
-        public OpenAIClientFacade(IConfiguration configuration, AzureKeyCredential azureKeyCredential, TokenCredential tokenCredential, IHttpClientFactory httpClientFactory, SearchClientFactory searchClientFactory)
+        public OpenAIClientFacade(IConfiguration configuration, AzureKeyCredential azureKeyCredential, TokenCredential tokenCredential)
         {
             _config = configuration;
             _standardChatGptDeployment = configuration[AppConfigurationSetting.AOAIStandardChatGptDeployment];
@@ -26,13 +22,6 @@ namespace Assistants.API.Core
 
             _azureKeyCredential = azureKeyCredential;
             _tokenCredential = tokenCredential;
-            _httpClientFactory = httpClientFactory;
-            _searchClientFactory = searchClientFactory;
-
-            if (azureKeyCredential != null)
-                _standardChatGptClient = new AzureOpenAIClient(new Uri(_standardServiceEndpoint), _azureKeyCredential);
-            else
-                _standardChatGptClient = new AzureOpenAIClient(new Uri(_standardServiceEndpoint), _tokenCredential);
         }
 
         public string GetKernelDeploymentName()
@@ -45,7 +34,7 @@ namespace Assistants.API.Core
             var kernel = BuildKernelBasedOnIdentity();
             if (toolPackage == "DATAMAPPING")
             {
-                kernel.ImportPluginFromObject(new DataMapperPlugins(_httpClientFactory, _config), "DATAMAPPING");
+                kernel.ImportPluginFromObject(new DataMapperPlugins(_config), "DATAMAPPING");
             }
 
             return kernel;

@@ -28,7 +28,7 @@ namespace Assistants.API.Core
                 var standardServiceKey = config["AOAIStandardServiceKey"];
 
 
-                var facade =  new OpenAIClientFacade(configuration, new Azure.AzureKeyCredential(standardServiceKey), null, sp.GetRequiredService<IHttpClientFactory>(), sp.GetRequiredService<SearchClientFactory>());
+                var facade =  new OpenAIClientFacade(configuration, new Azure.AzureKeyCredential(standardServiceKey), null);
                 return facade;
             });
             services.AddSingleton<DataMapperChatService>();

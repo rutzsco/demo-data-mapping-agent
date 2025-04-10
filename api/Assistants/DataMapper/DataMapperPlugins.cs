@@ -10,11 +10,9 @@ namespace MinimalApi.Services.Skills;
 
 public class DataMapperPlugins
 {
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
-    public DataMapperPlugins(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public DataMapperPlugins(IConfiguration configuration)
     {
-        _httpClientFactory = httpClientFactory;
         _configuration = configuration;
     }
 
